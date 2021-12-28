@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TodoBrowse.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ReadFileExts" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.txt .md .cs .c .cpp .h .hpp .wiki</Value>
+    </Setting>
+    <Setting Name="TodoTags" Type="System.String" Scope="User">
+      <Value Profile="(Default)">todo TODO done DONE question QUESTION надо НАДО тодо ТОДО вопрос ВОПРОС</Value>
+    </Setting>
+    <Setting Name="NadoTags" Type="System.String" Scope="User">
+      <Value Profile="(Default)">надо</Value>
+    </Setting>
+    <Setting Name="LastFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">c:\</Value>
+    </Setting>
+    <Setting Name="NumOfCharsBeforeNado" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">48</Value>
+    </Setting>
+    <Setting Name="NumOfCharsAfterNado" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">128</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

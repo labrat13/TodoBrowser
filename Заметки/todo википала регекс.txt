@@ -1,0 +1,34 @@
+todoKey = buildRegex("\b(?:todo|done|wait|action|track|issue|question|project)(?:\.[^:\s]+)?", "key")
+ = 
+\b  Match empty string at word (\w+) boundary
+(
+(?:...)       Non-capturing version of regular parens
+todo or done or ...
+)
+(
+(?:...)       Non-capturing version of regular parens
+.
+[ start char set
+^ negate char set
+: or \s  (= Whitespace tab cr lf ff vtab)
+] end char set
++ 1 or more samples
+)
+? 0 or 1 samples
+
+example: todo.part1.part2:
+
+-----------------------------------------------------------------
+
+todoEnd = buildRegex("\n|\||(?!.)") 
+ = 
+ \n or | or ? or ! or .
+-----------------------------------------------------------------
+
+todoEntry = todoKey + buildRegex(":", "todoDelimiter") + todoContent
+
+       
+todoEntryWithTermination = todoEntry + Optional(buildRegex(ur"\|"))
+
+Тут очевидно сначала надо выявить начальный тег вроде todo и его подразделов, потом найти конец строки или |?!. а текст между ними взять как содержимое тега. 
+Хотя вроде бы это можно сделать одним капчем: и тодо субтеги и контент. Возможно, это не требуется в википаде или парсится потом отдельно.

@@ -1,0 +1,497 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TodoLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:TodoLibrary.TodoEngineMode">
+            <summary>
+            Режим работы движка, содержимое коллекции элементов
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoEngineMode.Default">
+            <summary>
+            Неопределенный режим движка, ошибка, (=0)
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoEngineMode.TodoItems">
+            <summary>
+            Режим работы с тодо-задачами
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoEngineMode.NadoItems">
+            <summary>
+            Режим работы с Надо-задачами
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoEngineMode.Mixed">
+            <summary>
+            Работа с разными типами элементов
+            </summary>
+        </member>
+        <member name="T:TodoLibrary.TodoEngine">
+             <summary>
+             
+             </summary>
+             <example>
+             <code>
+                     static void Main(string[] args)
+             {
+                //source folder
+                string srcFolder = "D:\\";
+                //задаем список тегов - его обычно следует хранить в настройках приложения.
+                string tags = "todo TODO done DONE question QUESTION надо НАДО тодо ТОДО вопрос ВОПРОС";
+                //задаем расширения файлов
+                string exts = ".txt xml cs cpp";
+                TodoEngine engine = new TodoEngine();
+                engine.Init(exts, tags, Encoding.GetEncoding(1251));
+                //add events
+                engine.AppMessageHandler += new ApplicationMessageEventHandler(engine_AppMessageHandler);
+                engine.AppProgressHandler += new ApplicationProgressEventHandler(engine_AppProgressHandler);
+            
+                TodoItemCollection col = engine.getTodoItemsFromFolder(srcFolder);
+            
+                Console.WriteLine("Найденные задачи:");
+                foreach (TodoItem it in col.Items)
+                    Console.WriteLine(it.ToString());
+            
+                return;
+             }
+             /// <summary>
+             /// Print progress message to console
+             /// </summary>
+             /// <param name="sender"></param>
+             /// <param name="e"></param>
+             //static void engine_AppProgressHandler(object sender, ApplicationProgressEventArgs e)
+             //{
+                Console.WriteLine("Файл {0} из {1}: {2}", e.CurrentValue, e.MaxValue, e.Message);
+             }
+             /// <summary>
+             /// Print error message to console
+             /// </summary>
+             /// <param name="sender"></param>
+             /// <param name="e"></param>
+             static void engine_AppMessageHandler(object sender, ApplicationMessageEventArgs e)
+             {
+                Console.WriteLine(e.Message);
+             }
+             </code>
+             </example>
+        </member>
+        <member name="F:TodoLibrary.TodoEngine.m_extensions">
+            <summary>
+            Массив строк допустимых расширений файлов
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoEngine.m_tags">
+            <summary>
+            Массив строк тегов тодо-задач или надо-задач
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoEngine.m_defaultEncoding">
+            <summary>
+            Кодировка по умолчанию для текстовых файлов.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoEngine.m_numCharsBeforeNado">
+            <summary>
+            Количество символов текста перед надо-тегом.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoEngine.m_numCharsAfterNado">
+            <summary>
+            Количество символов текста после надо-тега.
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.#ctor">
+            <summary>
+            Конструктор
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.Init(System.String,System.String,System.Text.Encoding,System.Int32,System.Int32)">
+            <summary>
+            NT-Инициализировать движок
+            </summary>
+            <param name="exts">Строка расширений файлов с задачами</param>
+            <param name="tags">Массив строк тегов тодо-задач или надо-задач</param>
+            <param name="enc">Кодировка по умолчанию для текстовых файлов.</param>
+            <param name="charsBeforeNado">Количество символов текста перед надо-тегом. Игнорируется при поиске тодо-задач.</param>
+            <param name="charsAfterNado">Количество символов текста после надо-тега. Игнорируется при поиске тодо-задач.</param>
+            <example>
+            <code>
+            Init(".txt .cs .c .cpp .h .hpp", "todo TODO done DONE QUESTION question", Encoding.Default);
+            </code>
+            </example>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.OnProgress(TodoLibrary.ApplicationProgressEventArgs)">
+            <summary>
+            Raise Progress event
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.OnMessage(TodoLibrary.ApplicationMessageEventArgs)">
+            <summary>
+            Raise Message event
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.getSrcFiles(System.String)">
+            <summary>
+            NT-Получить файлы-источники задач, соответствующие допустимым расширениям файлов
+            </summary>
+            <param name="SrcFolder">Путь к папке проекта</param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.getFiles(System.String,System.IO.SearchOption)">
+            <summary>
+            NT-Получить файлы-источники задач, соответствующие допустимым расширениям файлов
+            </summary>
+            <param name="SrcFolder">Путь к папке проекта</param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.detectEncoding(System.String)">
+            <summary>
+            NT-Определить кодировку текстового файла
+            </summary>
+            <param name="file">Путь к файлу</param>
+            <returns>Функция возвращает кодировку файла. Если определить кодировку не удалось, функция возвращает установленную в объекте кодировку по умолчанию.</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.isAllowedExtension(System.String)">
+            <summary>
+            NT-убедиться, что файл имеет допустимое расширение.
+            </summary>
+            <param name="s">Путь к файлу</param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.getTodoItemsFromFolder(System.String)">
+            <summary>
+            NT-Извлечь тодо-задачи из указанной папки
+            </summary>
+            <param name="srcFolder">Папка файлов-источников задач</param>
+            <returns>Функция возвращает коллекцию задач</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.getTodoItemsFromFile(System.String)">
+            <summary>
+            NT-Извлечь тодо-задачи из указанного файла
+            </summary>
+            <param name="srcFile">Файл-источник задач</param>
+            <returns>Функция возвращает коллекцию задач</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.getNadoItemsFromFile(System.String)">
+            <summary>
+            NR-Извлечь надо-задачи из указанного файла
+            </summary>
+            <param name="file">Файл-источник задач</param>
+            <returns>Функция возвращает коллекцию задач</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoEngine.getNadoItemsFromFolder(System.String)">
+            <summary>
+            NR-Извлечь надо-задачи из указанной папки
+            </summary>
+            <param name="srcFolder">Папка файлов-источников задач</param>
+            <param name="numCharsBeforeNado">Количество символов текста перед надо-тегом.</param>
+            <param name="numCharsAfterNado">Количество символов текста после надо-тега.</param>
+            <returns>Функция возвращает коллекцию задач</returns>
+        </member>
+        <!-- Некорректный XML-комментарий для члена "P:TodoLibrary.TodoEngine.DefaultEncoding" проигнорирован -->
+        <member name="P:TodoLibrary.TodoEngine.Extensions">
+            <summary>
+            Массив строк допустимых расширений файлов
+            </summary>
+            <example>
+            .txt .cs .c .cpp .h .hpp
+            </example>
+        </member>
+        <member name="P:TodoLibrary.TodoEngine.Tags">
+            <summary>
+            Строка тегов тодо-задач
+            </summary>
+            <example>
+            "todo TODO"
+            </example>
+        </member>
+        <member name="P:TodoLibrary.TodoEngine.NumberOfCharsBeforeNado">
+            <summary>
+            Количество символов текста перед надо-тегом.
+            Игнорируется при поиске тодо-задач.
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.TodoEngine.NumberOfCharsAfterNado">
+            <summary>
+            Количество символов текста после надо-тега.
+            Игнорируется при поиске тодо-задач.
+            </summary>
+        </member>
+        <member name="T:TodoLibrary.ApplicationMessageEventArgs">
+            <summary>
+            Аргумент события сообщения процесса
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.ApplicationMessageEventArgs.#ctor(System.Int32,System.String)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="code">Message code </param>
+            <param name="message">Message text</param>
+        </member>
+        <member name="P:TodoLibrary.ApplicationMessageEventArgs.Code">
+            <summary>
+            Message code
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.ApplicationMessageEventArgs.Message">
+            <summary>
+            Message text
+            </summary>
+        </member>
+        <member name="T:TodoLibrary.ApplicationProgressEventArgs">
+            <summary>
+            Аргумент события прогресса процесса
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.ApplicationProgressEventArgs.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="current">Current progress value</param>
+            <param name="maxvalue">Maximum progress value</param>
+            <param name="message">Message text</param>
+        </member>
+        <member name="P:TodoLibrary.ApplicationProgressEventArgs.CurrentValue">
+            <summary>
+            Current progress value
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.ApplicationProgressEventArgs.MaxValue">
+            <summary>
+            Maximum progress value
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.ApplicationProgressEventArgs.Message">
+             <summary>
+            Message text
+             </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItem.m_key">
+            <summary>
+            строка-ключ тодо-итема.
+            Пример: todo.важно.сложно
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItem.m_content">
+            <summary>
+            строка текста тодо-задачи.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItem.m_sourcePath">
+            <summary>
+            путь к файлу-источнику тодо-задачи.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItem.m_startPos">
+            <summary>
+            Позиция заголовка тодо-задачи как начала тодо-задачи в исходном тексте.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItem.m_keyLength">
+            <summary>
+            Длина заголовка тодо-задачи, символов.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItem.m_length">
+            <summary>
+            Длина всей тодо-задачи, символов.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItem.keySeparator">
+            <summary>
+            Разделитель подключей в составном тодо.важно
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.TodoItem.#ctor">
+            <summary>
+            default constructor
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.TodoItem.getKeys">
+            <summary>
+            NT-получить ключи составного тодо как массив строк.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:TodoLibrary.TodoItem.Source">
+            <summary>
+            путь к файлу-источнику тодо-задачи.
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.TodoItem.Key">
+            <summary>
+            строка-ключ тодо-итема.
+            Пример: todo.важно.сложно
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.TodoItem.Content">
+            <summary>
+            строка текста тодо-задачи.
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.TodoItem.StartPosition">
+            <summary>
+            Позиция заголовка тодо-задачи как начала тодо-задачи в исходном тексте.
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.TodoItem.KeyLength">
+            <summary>
+            Длина заголовка тодо-задачи, символов.
+            </summary>        
+        </member>
+        <member name="P:TodoLibrary.TodoItem.Length">
+            <summary>
+            Длина всей тодо-задачи, символов.
+            </summary>
+        </member>
+        <member name="T:TodoLibrary.TodoItemCollection">
+            <summary>
+            Коллекция тодо-задач.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItemCollection.endline">
+            <summary>
+            Символы-ограничители конца строки
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItemCollection.m_items">
+            <summary>
+            Список извлеченных тодо-задач.
+            </summary>
+        </member>
+        <member name="F:TodoLibrary.TodoItemCollection.m_ContentType">
+            <summary>
+            Тип содержимого коллекции
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.ToString">
+            <summary>
+            NT-
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.Add(TodoLibrary.TodoItem)">
+            <summary>
+            NT-Добавить элемент в коллекцию
+            </summary>
+            <param name="ti"></param>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.Add(TodoLibrary.TodoItemCollection)">
+            <summary>
+            NT-Добавить содержимое коллекции в текущую коллекцию
+            </summary>
+            <param name="coll">Добавляемая коллекция</param>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.AddRange(System.Collections.Generic.IEnumerable{TodoLibrary.TodoItem})">
+            <summary>
+            NT-Добавить набор итемов в коллекцию.
+            </summary>
+            <param name="items"></param>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.Clear">
+            <summary>
+            NT- Очистить коллекцию.
+            </summary>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.ExtractTodos(System.String,System.String,System.String[])">
+            <summary>
+            NT-Создать коллекцию тодо-задач для текста из файла.
+            </summary>
+            <param name="src">Путь к исходному файлу для указания в качестве источника.</param>
+            <param name="text">Текст исходного файла.</param>
+            <param name="tags">Список тегов тодо-задач. Пример: todo done question.</param>
+            <returns>Возвращает объект коллекции тодо-задач для исходного файла</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.ExtractTodoItems(System.String,System.String,System.String[])">
+            <summary>
+            NT-Создать список тодо-задач для текста из файла.
+            </summary>
+            <param name="src">Путь к исходному файлу для указания в качестве источника.</param>
+            <param name="text">Текст исходного файла.</param>
+            <param name="tags">Список тегов тодо-задач. Пример: todo done question.</param>
+            <returns>Возвращает список тодо-задач для исходного файла.</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.makeTodoItem(System.Text.RegularExpressions.Match,System.String,System.String)">
+            <summary>
+            NFT-Собрать тодо-итем из найденного регексом совпадения
+            </summary>
+            <param name="m">совпадение</param>
+            <param name="text">исходный текст</param>
+            <param name="src">Путь к исходному файлу для указания в качестве источника.</param>
+            <returns>Функция возвращает тодо-итем или null при неправильном распознавании.</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.makeTodoRegex(System.String[])">
+            <summary>
+            NT - создать регекс для разбора текста по набору todo-тегов
+            </summary>
+            <param name="tags">Массив строк тегов тодо-задач</param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.ExtractNados(System.String,System.String,System.String[],System.Int32,System.Int32)">
+            <summary>
+            NT-Создать коллекцию Надо-задач для текста из файла.
+            </summary>
+            <param name="src">Путь к исходному файлу для указания в качестве источника.</param>
+            <param name="text">Текст исходного файла.</param>
+            <param name="tags">Список тегов Надо-задач. Пример: надо</param>
+            <param name="charsBefore">Количество выводимых символов текста перед Надо-тегом.</param>
+            <param name="charsAfter">Количество выводимых символов текста после Надо-тега.</param>
+            <returns>Возвращает объект коллекции тодо-задач для исходного файла</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.makeNadoRegex(System.String[])">
+            <summary>
+            NT-Создать регекс для разбора текста по набору Надо-тегов 
+            </summary>
+            <param name="tags">Массив строк тегов Надо-задач</param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.ExtractNadoItems(System.String,System.String,System.String[],System.Int32,System.Int32)">
+            <summary>
+            NT-Создать список Надо-задач для текста из файла.
+            </summary>
+            <param name="src">Путь к исходному файлу для указания в качестве источника.</param>
+            <param name="text">Текст исходного файла.</param>
+            <param name="tags">Список тегов Надо-задач. Пример: надо</param>
+            <param name="charsBefore">Количество выводимых символов текста перед Надо-тегом.</param>
+            <param name="charsAfter">Количество выводимых символов текста после Надо-тега.</param>
+            <returns>Возвращает список надо-задач для исходного файла.</returns>
+        </member>
+        <member name="M:TodoLibrary.TodoItemCollection.makeNadoItem(System.Text.RegularExpressions.Match,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            NT-Собрать тодо-итем из найденного регексом совпадения
+            </summary>
+            <param name="m">совпадение</param>
+            <param name="text">исходный текст</param>
+            <param name="src">Путь к исходному файлу для указания в качестве источника.</param>
+            <param name="charsBefore">Количество выводимых символов текста перед Надо-тегом.</param>
+            <param name="charsAfter">Количество выводимых символов текста после Надо-тега.</param>
+            <returns>Функция возвращает тодо-итем или null при неправильном распознавании.</returns>
+        </member>
+        <member name="P:TodoLibrary.TodoItemCollection.Items">
+            <summary>
+            Список извлеченных тодо-задач.
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.TodoItemCollection.Count">
+            <summary>
+            NT-Получить число элементов коллекции.
+            </summary>
+        </member>
+        <member name="P:TodoLibrary.TodoItemCollection.ContentType">
+            <summary>
+            Тип содержимого коллекции
+            </summary>
+        </member>
+    </members>
+</doc>
