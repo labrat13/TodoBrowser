@@ -2,6 +2,9 @@
 
 namespace TodoLibrary
 {
+    /// <summary>
+    /// Класс представляет тодо-задачу
+    /// </summary>
     public class TodoItem
     {
         /// <summary>
@@ -98,6 +101,10 @@ namespace TodoLibrary
             internal set { this.m_length = value; }
         }
 
+        /// <summary>
+        /// Строковое представление объекта для отладки
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return String.Format("{0}:{1}", this.m_key, this.m_content);

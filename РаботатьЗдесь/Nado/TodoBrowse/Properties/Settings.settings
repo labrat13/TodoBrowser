@@ -20,5 +20,8 @@
     <Setting Name="NumOfCharsAfterNado" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">128</Value>
     </Setting>
+    <Setting Name="DefaultEncoding" Type="System.String" Scope="User">
+      <Value Profile="(Default)">windows-1251</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

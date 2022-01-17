@@ -303,8 +303,9 @@ namespace TodoBrowse
             //do work with todo
             string tags = Properties.Settings.Default.TodoTags;
             string exts = Properties.Settings.Default.ReadFileExts;
+            string defaultEncoding = Properties.Settings.Default.DefaultEncoding;
             TodoEngine engine = new TodoEngine();
-            engine.Init(exts, tags, Encoding.GetEncoding(1251), 0, 0);
+            engine.Init(exts, tags, Encoding.GetEncoding(defaultEncoding), 0, 0);
             //add events
             engine.AppMessageHandler += new ApplicationMessageEventHandler(engine_AppMessageHandler);
             engine.AppProgressHandler += new ApplicationProgressEventHandler(engine_AppProgressHandler);
@@ -501,8 +502,9 @@ namespace TodoBrowse
             string exts = Properties.Settings.Default.ReadFileExts;
             int n1 = Properties.Settings.Default.NumOfCharsBeforeNado;
             int n2 = Properties.Settings.Default.NumOfCharsAfterNado;
+            string defaultEncoding = Properties.Settings.Default.DefaultEncoding;
             TodoEngine engine = new TodoEngine();
-            engine.Init(exts, tags, Encoding.GetEncoding(1251), n1, n2);
+            engine.Init(exts, tags, Encoding.GetEncoding(defaultEncoding), n1, n2);
             //add events
             engine.AppMessageHandler += new ApplicationMessageEventHandler(engine_AppMessageHandler);
             engine.AppProgressHandler += new ApplicationProgressEventHandler(engine_AppProgressHandler);

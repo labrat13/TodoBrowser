@@ -6,7 +6,17 @@ using System.IO;
 namespace TodoLibrary
 {
     // Delegate declaration.
+    /// <summary>
+    /// Обработчик события сообщения приложения
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public delegate void ApplicationMessageEventHandler(object sender, ApplicationMessageEventArgs e);
+    /// <summary>
+    /// Обработчик события обновления прогресс-бара
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public delegate void ApplicationProgressEventHandler(object sender, ApplicationProgressEventArgs e);
     
     /// <summary>
@@ -95,7 +105,7 @@ namespace TodoLibrary
         #region Properties
         /// <summary>
         /// Кодировка по умолчанию для текстовых файлов.
-        /// </summary
+        /// </summary>
         public Encoding DefaultEncoding
         { 
             get { return this.m_defaultEncoding; }
@@ -181,9 +191,13 @@ namespace TodoLibrary
         }
 
         #region Events for console and progress bar
-
+        /// <summary>
+        /// Обработчик события изменения прогресс-бара
+        /// </summary>
         public event ApplicationProgressEventHandler AppProgressHandler;
-
+        /// <summary>
+        /// Обработчик события сообщения приложения
+        /// </summary>
         public event ApplicationMessageEventHandler AppMessageHandler;
 
         /// <summary>
@@ -219,7 +233,7 @@ namespace TodoLibrary
         /// <summary>
         /// NT-Получить файлы-источники задач, соответствующие допустимым расширениям файлов
         /// </summary>
-        /// <param name="SrcFolder">Путь к папке проекта</param>
+        /// <param name="srcFolder">Путь к папке проекта</param>
         /// <returns></returns>
         private string[] getSrcFiles(string srcFolder)
         {
@@ -227,7 +241,7 @@ namespace TodoLibrary
             //public static string[] getFolderFilesByExts(String folder, string[] fileExtensions, SearchOption option)
             //как более оптимизированный способ выбрать все файлы с заданными расширениями.
             
-            //TODO: выдает ошибку, если в каталоге встречается папка или файл с запрещенным доступом.
+            //Важно: выдает ошибку, если в каталоге встречается папка или файл с запрещенным доступом.
             //Например, папка D:\SystemVolumeInformation
             //После нее исполнение останавливается и прочие папки не просматриваются.
             //- Надо обходить каталоги рекурсивно, игнорируя эти исключения доступа.
@@ -250,7 +264,8 @@ namespace TodoLibrary
         /// <summary>
         /// NT-Получить файлы-источники задач, соответствующие допустимым расширениям файлов
         /// </summary>
-        /// <param name="SrcFolder">Путь к папке проекта</param>
+        /// <param name="srcFolder">Путь к папке проекта</param>
+        /// <param name="option">SearchOption</param>
         /// <returns></returns>
         private string[] getFiles(string srcFolder, SearchOption option)
         {
@@ -321,6 +336,7 @@ namespace TodoLibrary
         /// <returns></returns>
         private bool isAllowedExtension(string s)
         {
+            //TODO: если файл не имеет расширения, эта функция вернет false. Следовательно, файлы без расширения эта программа не читает.
             string ext = Path.GetExtension(s); //'.ext'
             foreach (string t in this.m_extensions)
                 if (String.Equals(ext, t, StringComparison.OrdinalIgnoreCase) == true)
@@ -394,7 +410,7 @@ namespace TodoLibrary
         /// <summary>
         /// NT-Извлечь тодо-задачи из указанного файла
         /// </summary>
-        /// <param name="srcFile">Файл-источник задач</param>
+        /// <param name="file">Файл-источник задач</param>
         /// <returns>Функция возвращает коллекцию задач</returns>
         public TodoItemCollection getTodoItemsFromFile(string file)
         {
@@ -446,8 +462,6 @@ namespace TodoLibrary
         /// NR-Извлечь надо-задачи из указанной папки
         /// </summary>
         /// <param name="srcFolder">Папка файлов-источников задач</param>
-        /// <param name="numCharsBeforeNado">Количество символов текста перед надо-тегом.</param>
-        /// <param name="numCharsAfterNado">Количество символов текста после надо-тега.</param>
         /// <returns>Функция возвращает коллекцию задач</returns>
         public TodoItemCollection getNadoItemsFromFolder(string srcFolder)
         {
