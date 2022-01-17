@@ -13,7 +13,7 @@ Windows XP application for todo's search. Выбор задач в больши�
  * Russificated user
 
 ## Download link
- * https://github.com/labrat13/TodoBrowser/releases/tag/release-1.0.3-26.12.2021
+ * https://github.com/labrat13/TodoBrowser/releases/tag/TodoBrowser-v104-18.01.2022
 
 
 
